@@ -1,21 +1,34 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour 
 {
 	public List<GameObject> enemiesWithinRange; //Array list, where the length of the array is flexible.
 
+	private Rigidbody2D rb;
 
 	//public Transform target;
 	public float speed;
+
+	public bool isKnockback;
+
+	private float knockBackTimer = 0.3f;
+
+
+	public float timeSurvivedTimer;
+	public Text timeSurvivedText;
+
+
+
 
 
 
 	// Use this for initialization
 	void Start () 
 	{
-
+		rb = GetComponent<Rigidbody2D> ();
 	}
 
 	// Update is called every unlocked framerate frame
@@ -47,7 +60,38 @@ public class PlayerController : MonoBehaviour
 		if (Input.GetMouseButtonDown(0)) //Checks if the "left mouse button" key is pressed down. If it is, run the if-statement.
 		{
 			DestroyEnemies (); //Runs the "DestroyEnemies ()" function.
+		
 
+		}
+
+		timeSurvivedTimer += Time.deltaTime; //Counts the "timeSurvivedTimer" timer up per second. Counting is independent of the monitor's refresh rate.
+
+		timeSurvivedText.text = "Time Survived: " + timeSurvivedTimer.ToString("F1") + "s"; //creates a timer in the UI with one decimal point.
+
+
+		playerBoundaries (); //Run the "playerBoundaries ()" function.
+
+	}
+
+	void FixedUpdate ()
+	{
+		if (!isKnockback) 
+		{
+			rb.velocity = Vector2.zero;
+		} 
+		else 
+		{
+			knockBackTimer -= Time.fixedDeltaTime; //Counts timer down per second. Counting is independent of the monitor's refresh rate.
+
+			if (knockBackTimer <= 0) 
+			{
+
+
+				knockBackTimer = 0.3f;
+
+				isKnockback = false;
+
+			}
 
 		}
 	}
@@ -68,6 +112,19 @@ public class PlayerController : MonoBehaviour
 	}
 	*/
 
+	/*
+	public void OnCollisionEnter2D(Collision2D other) //Runs when the "Player" collides with the "other" object (in this case the "Enemy").
+	{
+		if (other.gameObject.tag == "Enemy") 
+		{
+			renderer.material.color = Color.red;
+			yield return new WaitForSeconds(0.5f);
+			renderer.material.color = Color.white;
+		}
+	}
+	*/
+
+
 
 	void DestroyEnemies ()
 	{
@@ -77,6 +134,30 @@ public class PlayerController : MonoBehaviour
 		}
 
 		enemiesWithinRange.Clear (); //Clears/resets the array list.
+	}
+
+
+	void playerBoundaries ()
+	{
+		if (transform.position.x > 9.05f) 
+		{
+			transform.position = new Vector3 (9.05f, transform.position.y, transform.position.z);
+		}
+
+		if (transform.position.x < -9.05f) 
+		{
+			transform.position = new Vector3 (-9.05f, transform.position.y, transform.position.z);
+		}
+
+		if (transform.position.y > 4.05f) 
+		{
+			transform.position = new Vector3 (transform.position.x, 4.05f, transform.position.z);
+		}
+
+		if (transform.position.y < -4.05f) 
+		{
+			transform.position = new Vector3 (transform.position.x, -4.05f, transform.position.z);
+		}
 	}
 }
 

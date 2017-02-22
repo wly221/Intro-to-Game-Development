@@ -19,10 +19,10 @@ public class PlayerAttackCone : MonoBehaviour
 
 	void OnTriggerEnter2D(Collider2D other) //Runs when the "other" enters the trigger.
 	{
-		Debug.Log ("Triggered");
-
 		if (other.tag == "Enemy") //Checks if the "tag" of the "other" game object entering this trigger is set to "Enemy". If so, run this if-statement.
 		{
+			Debug.Log ("Triggered");
+
 
 			//The code below is commented out because I am no longer intending to "Destroy" this "gameObject".
 			//Destroy (other.gameObject); //"Destroy" other "gameObject" (gameObjects with "Enemy" tag)
@@ -39,7 +39,16 @@ public class PlayerAttackCone : MonoBehaviour
 	{
 		if (other.tag == "Enemy") //Checks if the "tag" of the "other" game object exiting this trigger is set to "Enemy". If so, run this if-statement.
 		{ 
-			playerControllerScript.enemiesWithinRange.Remove(other.gameObject); //Remove "other" gameObject from the "enemiesWithinRange" Array List in the "PlayerController" script
+			for (int i = 0; i < playerControllerScript.enemiesWithinRange.Count; i++) 
+			{
+				if (playerControllerScript.enemiesWithinRange [i] == other.gameObject) 
+				{
+					playerControllerScript.enemiesWithinRange.Remove (other.gameObject);
+					i--;
+				}
+			}
+			//playerControllerScript.enemiesWithinRange.Remove(other.gameObject); //Remove "other" gameObject from the "enemiesWithinRange" Array List in the "PlayerController" script
+
 		}
 	}
 }
