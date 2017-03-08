@@ -21,16 +21,7 @@ public class PlayerAttackCone : MonoBehaviour
 	{
 		if (other.tag == "Enemy") //Checks if the "tag" of the "other" game object entering this trigger is set to "Enemy". If so, run this if-statement.
 		{
-			Debug.Log ("Triggered");
-
-
-			//The code below is commented out because I am no longer intending to "Destroy" this "gameObject".
-			//Destroy (other.gameObject); //"Destroy" other "gameObject" (gameObjects with "Enemy" tag)
-
-
-			playerControllerScript.enemiesWithinRange.Add(other.gameObject); //Add "other" gameObject to the "enemiesWithinRange" Array List in the "PlayerController" script
-
-			//gameObject.SetActive(false); //Sets the entire game object that this script is in, to not active (false).
+			playerControllerScript.enemiesWithinRange.Add(other.gameObject); //Add "other" gameObject to the "enemiesWithinRange" array list in the "PlayerController" script.
 		}
 	}
 
@@ -39,16 +30,14 @@ public class PlayerAttackCone : MonoBehaviour
 	{
 		if (other.tag == "Enemy") //Checks if the "tag" of the "other" game object exiting this trigger is set to "Enemy". If so, run this if-statement.
 		{ 
-			for (int i = 0; i < playerControllerScript.enemiesWithinRange.Count; i++) 
+			for (int i = 0; i < playerControllerScript.enemiesWithinRange.Count; i++) //Creates a for-loop.
 			{
 				if (playerControllerScript.enemiesWithinRange [i] == other.gameObject) 
 				{
-					playerControllerScript.enemiesWithinRange.Remove (other.gameObject);
+					playerControllerScript.enemiesWithinRange.Remove (other.gameObject); //Remove "other" gameObject from the "enemiesWithinRange" array list in the "PlayerController" script.
 					i--;
 				}
 			}
-			//playerControllerScript.enemiesWithinRange.Remove(other.gameObject); //Remove "other" gameObject from the "enemiesWithinRange" Array List in the "PlayerController" script
-
 		}
 	}
 }

@@ -5,30 +5,37 @@ using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour 
 {
-	public List<GameObject> enemiesWithinRange; //Array list, where the length of the array is flexible.
+	public List<GameObject> enemiesWithinRange; //Declare a public variable of type array list and name it "enemiesWithinRange". This is an array list, where the length of the array is flexible.
 
-	private Rigidbody2D rb;
+	private Rigidbody2D rb; //Declare a private variable of type "Rigidbody2D" and name it "rb".
 
-	//public Transform target;
-	public float speed;
+	public float speed; //Declare a public variable of type "float" and name it "speed". "speed" is set in the inspector.
 
-	public bool isKnockback;
+	public bool isKnockback; //Declare a public variable of type "bool" and name it "isKnockback".
 
-	private float knockBackTimer = 0.3f;
-
-
-	public float timeSurvivedTimer;
-	public Text timeSurvivedText;
+	private float knockBackTimer = 0.3f; //Declare a private variable of type "float" and name it "knockBackTimer". Sets for 0.3 seconds.
 
 
+	public float timeSurvivedTimer; //Declare a public variable of type "float" and name it "timeSurvivedTimer".
+	public Text timeSurvivedText; //Declare a public variable of type "Text" and name it "timeSurvivedText". "timeSurvivedText" is set as "Time Survived Text" by dragging the "Time Survived Text" object into the inspector.
 
+
+	public GameObject enemies; //Declare a public variable of type "GameObject" and name it "enemies". "enemies" is set as the "Enemy" by dragging the "Enemy" prefab into the inspector.
+
+	public GameObject bloodParticles; //Declare a public variable of type "GameObject" and name it "bloodParticles". "bloodParticles" is set as the "Blood Particles" by dragging the "Blood Particles" prefab into the inspector.
+
+	public GameObject deadBodies; //Declare a public variable of type "GameObject" and name it "deadBodies". "deadBodies" is set as the "Dead Body" by dragging the "Dead Body" prefab into the inspector.
+
+	public GameObject weaponParticles; //Declare a public variable of type "GameObject" and name it "weaponParticles". "weaponParticles" is set as the "Weapon Particles" by dragging the "Weapon Particles" prefab into the inspector.
+
+	public GameObject weaponTip; //Declare a public variable of type "GameObject" and name it "weaponTip". "weaponTip" is set as the "Weapon Tip" by dragging the "Weapon Tip" object into the inspector.
 
 
 
 	// Use this for initialization
 	void Start () 
 	{
-		rb = GetComponent<Rigidbody2D> ();
+		rb = GetComponent<Rigidbody2D> (); //Sets the "rb" variable to be the "Rigidbody2D" component in this game object.
 	}
 
 	// Update is called every unlocked framerate frame
@@ -50,8 +57,8 @@ public class PlayerController : MonoBehaviour
 			GetComponent<Transform> ().position = new Vector3 (GetComponent<Transform> ().position.x, GetComponent<Transform> ().position.y - 0.1f, 0f); //The "Transform" component of this game object has a "position" set to a newly initialized "Vector3".
 		}
 
-		Vector3 p = Camera.main.ScreenToWorldPoint (new Vector3 (Input.mousePosition.x, Input.mousePosition.y, Camera.main.nearClipPlane)); // Convert mouse position to world position.
-		p.z = 0f;
+		Vector3 p = Camera.main.ScreenToWorldPoint (new Vector3 (Input.mousePosition.x, Input.mousePosition.y, Camera.main.nearClipPlane)); //Convert mouse position to world position.
+		p.z = 0f; //Sets z-value of "p" as 0.
 
 		var dir = p - transform.position; //Finds the direction between player and mouse position.
 		var angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg; //Finds the angle of player and mouse position based on the x-axis.
@@ -60,76 +67,45 @@ public class PlayerController : MonoBehaviour
 		if (Input.GetMouseButtonDown(0)) //Checks if the "left mouse button" key is pressed down. If it is, run the if-statement.
 		{
 			DestroyEnemies (); //Runs the "DestroyEnemies ()" function.
-		
-
+			Instantiate (weaponParticles, weaponTip.transform.position, Quaternion.identity); //This creates the "weaponParticles". This is choosing one object ("weaponParticles") to place, placing it in the position of the "weaponTip", and giving it the original rotation ("Quaternion.identity" just means original rotation).
 		}
 
 		timeSurvivedTimer += Time.deltaTime; //Counts the "timeSurvivedTimer" timer up per second. Counting is independent of the monitor's refresh rate.
 
 		timeSurvivedText.text = "Time Survived: " + timeSurvivedTimer.ToString("F1") + "s"; //creates a timer in the UI with one decimal point.
 
-
-		playerBoundaries (); //Run the "playerBoundaries ()" function.
-
+		PlayerBoundaries (); //Runs the "PlayerBoundaries ()" function.
 	}
 
 	void FixedUpdate ()
 	{
-		if (!isKnockback) 
+		if (!isKnockback) //Checks if "isKnockback" is set to "false". If so, run this if-statement.
 		{
-			rb.velocity = Vector2.zero;
+			rb.velocity = Vector2.zero; //Sets the "velocity" of "rb" to be a "Vector2" of "zero".
 		} 
-		else 
+		else //Checks if "isKnockback" is set to "true". If so, run this else-statement.
 		{
 			knockBackTimer -= Time.fixedDeltaTime; //Counts timer down per second. Counting is independent of the monitor's refresh rate.
 
-			if (knockBackTimer <= 0) 
+			if (knockBackTimer <= 0) //Checks if "knockBackTimer" is less than or equal to 0. If so, run this if-statement.
 			{
+				knockBackTimer = 0.3f; //Sets "knockBackTimer" to be 0.3 seconds.
 
-
-				knockBackTimer = 0.3f;
-
-				isKnockback = false;
-
+				isKnockback = false; //Sets "isKnockback" to be false.
 			}
-
 		}
 	}
 
 
-
-
-	/*
-	//void OnCollisionEnter2D (Collision2D other) //If a game object has a collider on it, it will look to see if this script also has this function. This function is automatically triggered when those game objects collide with this script.
-	//"OnCollisionEnter2D" is the method/function, "Collision2D" is the parameter, "other" is the variable, so whenever something collides with this script, the variable becomes the collider. 
-	//"Collision2D" is the collision of everything except this script.
-
+	void DestroyEnemies () //Creates a new function called "DestroyEnemies".
 	{
-		if (other.gameObject.name == "Circle") //Checks if the "gameObject" colliding with this script is named "Circle". If it is, run the if-statement.
+		for (int i = 0; i < enemiesWithinRange.Count; i++) //Creates a for-loop.
 		{
-			other.rigidbody.AddForce ((other.transform.position - transform.position)*10, ForceMode2D.Impulse); //Add a force to the "rigidbody" that is colliding with this script. This force is calculated by the position of the colliding game object minus the position of this game object and multiplying it by "10".
-		}
-	}
-	*/
+			enemies = enemiesWithinRange [i].transform.parent.gameObject; //Stores the enemies as a temporary variable before they get destroyed.
 
-	/*
-	public void OnCollisionEnter2D(Collision2D other) //Runs when the "Player" collides with the "other" object (in this case the "Enemy").
-	{
-		if (other.gameObject.tag == "Enemy") 
-		{
-			renderer.material.color = Color.red;
-			yield return new WaitForSeconds(0.5f);
-			renderer.material.color = Color.white;
-		}
-	}
-	*/
+			StartCoroutine("DestroyEnemiesCo"); //Runs the coroutine named "DestroyEnemiesCo" in this script. 
 
 
-
-	void DestroyEnemies ()
-	{
-		for (int i = 0; i < enemiesWithinRange.Count; i++) 
-		{
 			Destroy (enemiesWithinRange [i].transform.parent.gameObject); //This for-loop destroys everything in the array list one by one. Destroys the parent of the game objects themselves.
 		}
 
@@ -137,26 +113,34 @@ public class PlayerController : MonoBehaviour
 	}
 
 
-	void playerBoundaries ()
+	public IEnumerator DestroyEnemiesCo() //Creates a coroutine named "DestroyEnemiesCo" that runs separate from the other functions of this script, in other words it runs in a different "timeline", so that the game does not encounter any game-breaking issues when the game waits for a certain amount of time (seconds).
 	{
-		if (transform.position.x > 9.05f) 
+		Instantiate (bloodParticles, enemies.transform.position, Quaternion.identity); //This creates the "bloodParticles". This is choosing one object ("bloodParticles") to place, placing it in the position of the "enemies", and giving it the original rotation ("Quaternion.identity" just means original rotation).
+		Instantiate (deadBodies, enemies.transform.position, Quaternion.identity); //This creates the "deadBodies". This is choosing one object ("deadBodies") to place, placing it in the position of the "enemies", and giving it the original rotation ("Quaternion.identity" just means original rotation).
+		yield return new WaitForSeconds(0.5f); //Holds the execution of the next line for "0.5f" seconds. In other words, waits "0.5f" seconds before the coroutine stops.
+	}
+		
+
+	void PlayerBoundaries () //Creates a new function called "PlayerBoundaries".
+	{
+		if (transform.position.x > 9.05f) //Checks if the x-position is greater than 9.05. If so, run this if-statement.
 		{
-			transform.position = new Vector3 (9.05f, transform.position.y, transform.position.z);
+			transform.position = new Vector3 (9.05f, transform.position.y, transform.position.z); //The "Transform" component of this game object has a "position" set to a newly initialized "Vector3".
 		}
 
-		if (transform.position.x < -9.05f) 
+		if (transform.position.x < -9.05f) //Checks if the x-position is less than -9.05. If so, run this if-statement.
 		{
-			transform.position = new Vector3 (-9.05f, transform.position.y, transform.position.z);
+			transform.position = new Vector3 (-9.05f, transform.position.y, transform.position.z); //The "Transform" component of this game object has a "position" set to a newly initialized "Vector3".
 		}
 
-		if (transform.position.y > 4.05f) 
+		if (transform.position.y > 4.05f) //Checks if the y-position is greater than 4.05. If so, run this if-statement.
 		{
-			transform.position = new Vector3 (transform.position.x, 4.05f, transform.position.z);
+			transform.position = new Vector3 (transform.position.x, 4.05f, transform.position.z); //The "Transform" component of this game object has a "position" set to a newly initialized "Vector3".
 		}
 
-		if (transform.position.y < -4.05f) 
+		if (transform.position.y < -4.05f) //Checks if the y-position is less than -4.05. If so, run this if-statement.
 		{
-			transform.position = new Vector3 (transform.position.x, -4.05f, transform.position.z);
+			transform.position = new Vector3 (transform.position.x, -4.05f, transform.position.z); //The "Transform" component of this game object has a "position" set to a newly initialized "Vector3".
 		}
 	}
 }
