@@ -30,6 +30,7 @@ public class PlayerController : MonoBehaviour
 
 	public GameObject weaponTip; //Declare a public variable of type "GameObject" and name it "weaponTip". "weaponTip" is set as the "Weapon Tip" by dragging the "Weapon Tip" object into the inspector.
 
+	public Animator playerAnimator; //Declare a public variable of type "Animator" and name it "playerAnimator". "playerAnimator" is set as the "Player Art" by dragging the "Player Art" object into the inspector.
 
 
 	// Use this for initialization
@@ -43,19 +44,29 @@ public class PlayerController : MonoBehaviour
 	{
 		if (Input.GetKey (KeyCode.A)) { //Checks if the "A" key is pressed down. If it is, run the if-statement.
 			GetComponent<Transform> ().position = new Vector3 (GetComponent<Transform> ().position.x - 0.1f, GetComponent<Transform> ().position.y, 0f); //The "Transform" component of this game object has a "position" set to a newly initialized "Vector3".
+			playerAnimator.Play("Walking Animation"); //Plays the "Walking Animation".
 		}
 
 		if (Input.GetKey (KeyCode.D)) { //Checks if the "D" key is pressed down. If it is, run the if-statement.
 			GetComponent<Transform> ().position = new Vector3 (GetComponent<Transform> ().position.x + 0.1f, GetComponent<Transform> ().position.y, 0f); //The "Transform" component of this game object has a "position" set to a newly initialized "Vector3".
+			playerAnimator.Play("Walking Animation"); //Plays the "Walking Animation".
 		}
 
 		if (Input.GetKey (KeyCode.W)) { //Checks if the "W" key is pressed down. If it is, run the if-statement.
 			GetComponent<Transform> ().position = new Vector3 (GetComponent<Transform> ().position.x, GetComponent<Transform> ().position.y + 0.1f, 0f); //The "Transform" component of this game object has a "position" set to a newly initialized "Vector3".
+			playerAnimator.Play("Walking Animation"); //Plays the "Walking Animation".
 		}
 
 		if (Input.GetKey (KeyCode.S)) { //Checks if the "S" key is pressed down. If it is, run the if-statement.
 			GetComponent<Transform> ().position = new Vector3 (GetComponent<Transform> ().position.x, GetComponent<Transform> ().position.y - 0.1f, 0f); //The "Transform" component of this game object has a "position" set to a newly initialized "Vector3".
+			playerAnimator.Play("Walking Animation"); //Plays the "Walking Animation".
 		}
+
+		if (Input.GetKey (KeyCode.A) == false && Input.GetKey (KeyCode.D) == false && Input.GetKey (KeyCode.W) == false && Input.GetKey (KeyCode.S) == false) //Checks if the "W", "A", "S", "D" keys are not pressed down. If so, run the if-statement.
+		{
+			playerAnimator.Play("Idle"); //Plays the "Idle" animation, which is currently no animation.
+		}
+			
 
 		Vector3 p = Camera.main.ScreenToWorldPoint (new Vector3 (Input.mousePosition.x, Input.mousePosition.y, Camera.main.nearClipPlane)); //Convert mouse position to world position.
 		p.z = 0f; //Sets z-value of "p" as 0.

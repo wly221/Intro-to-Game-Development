@@ -7,18 +7,16 @@ public class HurtPlayer : MonoBehaviour
 	public int damageToGive; //Declare a public variable of type "int" and name it "damageToGive". "damageToGive" is set in the inspector.
 	public Rigidbody2D enemyRigidBody; //Declare a public variable of type "Rigidbody2D" and name it "enemyRigidBody".
 
-	public GameObject playerTriangleIcon; //Declare a public variable of type "GameObject" and name it "playerTriangleIcon". "playerTriangleIcon" is set as the "Player Triangle Icon" by dragging the "Player Triangle Icon" object into the inspector.
-	public GameObject playerAttackZone; //Declare a public variable of type "GameObject" and name it "playerAttackZone". "playerAttackZone" is set as the "Player Attack Zone" by dragging the "Player Attack Zone" object into the inspector.
-	public GameObject weaponTip; //Declare a public variable of type "GameObject" and name it "weaponTip". "weaponTip" is set as the "Weapon Tip" by dragging the "Weapon Tip" object into the inspector.
+	public GameObject playerArt; //Declare a public variable of type "GameObject" and name it "playerArt".
 
 	private bool invincible = false; //Declare a private variable of type "bool" and name it "invincible". Set it to "false".
+
+	public AudioSource enemyAttackSoundEffect; //Declare a public variable of type "AudioSource" and name it "enemyAttackSoundEffect". "enemyAttackSoundEffect" is set as the "Enemy Attack Sound Effect" by dragging the "Enemy Attack Sound Effect" object into the inspector.
 
 	// Use this for initialization
 	void Start () 
 	{
-		playerTriangleIcon = GameObject.Find ("Player Triangle Icon"); //Assigns the inspector value for the "Enemy Collider" prefab. Whenever an "Enemy Collider" is created, it will first look for the "Player Triangle Icon" and assign it.
-		playerAttackZone = GameObject.Find ("Player Attack Zone (Weapon)"); //Assigns the inspector value for the "Enemy Collider" prefab. Whenever an "Enemy Collider" is created, it will first look for the "Player Attack Zone (Weapon)" and assign it.
-		weaponTip = GameObject.Find ("Weapon Tip"); //Assigns the inspector value for the "Enemy Collider" prefab. Whenever an "Enemy Collider" is created, it will first look for the "Weapon Tip" and assign it.
+		playerArt = GameObject.Find ("Player Art"); //Assigns the inspector value for the "Enemy Collider" prefab. Whenever an "Enemy Collider" is created, it will first look for the "Player Art" and assign it.
 	}
 	
 	// Update is called once per frame
@@ -34,6 +32,8 @@ public class HurtPlayer : MonoBehaviour
 			if (!invincible) //Checks if "invincible" is set to "false". If so, run this if-statement.
 			{
 				other.gameObject.GetComponent<PlayerHealthManager> ().HurtPlayer (damageToGive); //The "HurtPlayer" in this case is the function in the "PlayerHealthManager" script ("HurtPlayer" is not referring to the name of this script).
+
+				enemyAttackSoundEffect.Play (); //Plays the "enemyAttackSoundEffect".
 
 				other.gameObject.GetComponent<Rigidbody2D> ().AddForce (enemyRigidBody.velocity.normalized*50f, ForceMode2D.Impulse); //Adds a force to the "other" game object.
 
@@ -60,24 +60,15 @@ public class HurtPlayer : MonoBehaviour
 	{
 		for(var n = 0; n < 3; n++) //Creates a for-loop. Iterates for 2 times, so in total the duration will be 0.4 seconds (0.1 * 2 * 2 = 0.4)
 		{
-			player.GetComponent<SpriteRenderer>().enabled = true; //show the sprite renderer of the "player".
-			playerTriangleIcon.GetComponent<SpriteRenderer>().enabled = true; //show the sprite renderer of the "playerTriangleIcon".
-			playerAttackZone.GetComponent<SpriteRenderer>().enabled = true; //show the sprite renderer of the "playerAttackZone".
-			weaponTip.GetComponent<SpriteRenderer>().enabled = true; //show the sprite renderer of the "weaponTip".
+			playerArt.GetComponent<SpriteRenderer>().enabled = true; //show the sprite renderer of the "playerArt".
 
 			yield return new WaitForSeconds(0.15f); //wait for 0.15 seconds.
 
-			player.GetComponent<SpriteRenderer>().enabled = false; //hide the sprite renderer of the "player".
-			playerTriangleIcon.GetComponent<SpriteRenderer>().enabled = false; //hide the sprite renderer of the "playerTriangleIcon".
-			playerAttackZone.GetComponent<SpriteRenderer>().enabled = false; //hide the sprite renderer of the "playerAttackZone".
-			weaponTip.GetComponent<SpriteRenderer>().enabled = false; //hide the sprite renderer of the "weaponTip".
+			playerArt.GetComponent<SpriteRenderer>().enabled = false; //hide the sprite renderer of the "playerArt".
 
 			yield return new WaitForSeconds(0.15f); //wait for 0.15 seconds.
 		}
 
-		player.GetComponent<SpriteRenderer>().enabled = true; //in the end, keep showing the sprite renderer of the "player".
-		playerTriangleIcon.GetComponent<SpriteRenderer>().enabled = true; //in the end, keep showing the sprite renderer of the "playerTriangleIcon".
-		playerAttackZone.GetComponent<SpriteRenderer>().enabled = true; //in the end, keep showing the sprite renderer of the "playerAttackZone".
-		weaponTip.GetComponent<SpriteRenderer>().enabled = true; //in the end, keep showing the sprite renderer of the "weaponTip".
+		playerArt.GetComponent<SpriteRenderer>().enabled = true; //in the end, keep showing the sprite renderer of the "playerArt".
 	}
 }

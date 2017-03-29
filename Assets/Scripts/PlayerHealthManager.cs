@@ -14,6 +14,9 @@ public class PlayerHealthManager : MonoBehaviour
 
 	public GameObject theGameManager; //Declare a public variable of type "GameObject" and name it "theGameManager". "theGameManager" is set as the "Game Manager" by dragging the "Game Manager" object into the inspector.
 
+	public AudioSource playScreenMusic; //Declare a public variable of type "AudioSource" and name it "playScreenMusic". "playScreenMusic" is set as the "Play Screen Music" by dragging the "Play Screen Music" object into the inspector.
+	public AudioSource gameOverScreenMusic; //Declare a public variable of type "AudioSource" and name it "gameOverScreenMusic". "gameOverScreenMusic" is set as the "Game Over Screen Music" by dragging the "Game Over Screen Music" object into the inspector.
+
 
 	// Use this for initialization
 	void Start () 
@@ -32,6 +35,9 @@ public class PlayerHealthManager : MonoBehaviour
 
 			gameOverScreen.SetActive (true); //Sets the "gameOverScreen" to active (true).
 			gameObject.SetActive (false); //Sets the "gameObject" to not active (false).
+
+			playScreenMusic.Stop (); //Stops playing the "playScreenMusic".
+			gameOverScreenMusic.Play (); //Plays the "gameOverScreenMusic".
 		}
 	}
 		
