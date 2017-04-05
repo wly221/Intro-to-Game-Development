@@ -7,16 +7,21 @@ public class EnemyController : MonoBehaviour
 	public PlayerController thePlayer; //Declare a public variable of type "PlayerController" and name it "thePlayer". Making a reference to the "PlayerController" script attached to the "Player" game object.
 
 	private Rigidbody2D myRB; //Declare a private variable of type "Rigidbody2D" and name it "myRB".
-	private float moveSpeed = Random.Range (1, 3); //Declare a private variable of type "float" and name it "moveSpeed". Sets for range that is random between 1 and 3.
+	private float moveSpeed; //Declare a private variable of type "float" and name it "moveSpeed". 
 	public Vector2 direction; //Declare a public variable of type "Vector2" and name it "direction".
 
 
 	// Use this for initialization
 	void Start () 
 	{
-		thePlayer = GameObject.Find ("Player").GetComponent <PlayerController>(); //Assigns the inspector value for the "Enemy" prefab. Whenever an enemy is created, it will first look for the "Player" and assign it.
+		if (GameObject.Find ("Player") != null) //If the player can be found, run this if-statement.
+		{
+			thePlayer = GameObject.Find ("Player").GetComponent <PlayerController>(); //Assigns the inspector value for the "Enemy" prefab. Whenever an enemy is created, it will first look for the "Player" and assign it.
+		}
 
 		myRB = GetComponent<Rigidbody2D> (); //Sets the "myRB" variable to be the "Rigidbody2D" component in this game object.
+
+		moveSpeed = Random.Range (1, 3); //Sets "moveSpeed" for a range that is random between 1 and 3.
 	}
 
 	void FixedUpdate ()

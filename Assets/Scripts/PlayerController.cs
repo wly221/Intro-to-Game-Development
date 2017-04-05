@@ -32,6 +32,10 @@ public class PlayerController : MonoBehaviour
 
 	public Animator playerAnimator; //Declare a public variable of type "Animator" and name it "playerAnimator". "playerAnimator" is set as the "Player Art" by dragging the "Player Art" object into the inspector.
 
+	public bool invincible = false; //Declare a public variable of type "bool" and name it "invincible". Set it to "false".
+
+	public GameObject playerArt; //Declare a public variable of type "GameObject" and name it "playerArt".
+
 
 	// Use this for initialization
 	void Start () 
@@ -153,6 +157,27 @@ public class PlayerController : MonoBehaviour
 		{
 			transform.position = new Vector3 (transform.position.x, -4.05f, transform.position.z); //The "Transform" component of this game object has a "position" set to a newly initialized "Vector3".
 		}
+	}
+
+	public void resetInvulnerability () //Creates a new public function called "resetInvulnerability".
+	{
+		invincible = false; //Set "invincible" to be "false".
+	}
+
+	public IEnumerator MakeBlink (GameObject player) //Creates a coroutine named "MakeBlink" that runs separate from the other functions of this script, in other words it runs in a different "timeline", so that the game does not encounter any game-breaking issues when the game waits for a certain amount of time (seconds).
+	{
+		for(var n = 0; n < 3; n++) //Creates a for-loop. Iterates for 2 times, so in total the duration will be 0.4 seconds (0.1 * 2 * 2 = 0.4)
+		{
+			playerArt.GetComponent<SpriteRenderer>().enabled = true; //show the sprite renderer of the "playerArt".
+
+			yield return new WaitForSeconds(0.15f); //wait for 0.15 seconds.
+
+			playerArt.GetComponent<SpriteRenderer>().enabled = false; //hide the sprite renderer of the "playerArt".
+
+			yield return new WaitForSeconds(0.15f); //wait for 0.15 seconds.
+		}
+
+		playerArt.GetComponent<SpriteRenderer>().enabled = true; //in the end, keep showing the sprite renderer of the "playerArt".
 	}
 }
 
