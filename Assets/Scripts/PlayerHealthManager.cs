@@ -48,3 +48,4 @@ public class PlayerHealthManager : MonoBehaviour
 		healthText.text = "Health: " + currentHealth; //Sets the "Text" textbox of the "healthText" object to display "Health: " plus the "currentHealth" value.
 	}
 }
+
