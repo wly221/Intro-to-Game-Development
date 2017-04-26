@@ -15,10 +15,8 @@ public class PlayerController : MonoBehaviour
 
 	private float knockBackTimer = 0.3f; //Declare a private variable of type "float" and name it "knockBackTimer". Sets for 0.3 seconds.
 
-
 	public float timeSurvivedTimer; //Declare a public variable of type "float" and name it "timeSurvivedTimer".
 	public Text timeSurvivedText; //Declare a public variable of type "Text" and name it "timeSurvivedText". "timeSurvivedText" is set as "Time Survived Text" by dragging the "Time Survived Text" object into the inspector.
-
 
 	public GameObject enemies; //Declare a public variable of type "GameObject" and name it "enemies". "enemies" is set as the "Enemy" by dragging the "Enemy" prefab into the inspector.
 
@@ -68,7 +66,7 @@ public class PlayerController : MonoBehaviour
 
 		if (Input.GetKey (KeyCode.A) == false && Input.GetKey (KeyCode.D) == false && Input.GetKey (KeyCode.W) == false && Input.GetKey (KeyCode.S) == false) //Checks if the "W", "A", "S", "D" keys are not pressed down. If so, run the if-statement.
 		{
-			playerAnimator.Play("Idle"); //Plays the "Idle" animation, which is currently no animation.
+			playerAnimator.Play("Idle"); //Plays the "Idle" animation, which is no animation.
 		}
 			
 
@@ -119,7 +117,6 @@ public class PlayerController : MonoBehaviour
 			enemies = enemiesWithinRange [i].transform.parent.gameObject; //Stores the enemies as a temporary variable before they get destroyed.
 
 			StartCoroutine("DestroyEnemiesCo"); //Runs the coroutine named "DestroyEnemiesCo" in this script. 
-
 
 			Destroy (enemiesWithinRange [i].transform.parent.gameObject); //This for-loop destroys everything in the array list one by one. Destroys the parent of the game objects themselves.
 		}
@@ -179,5 +176,10 @@ public class PlayerController : MonoBehaviour
 
 		playerArt.GetComponent<SpriteRenderer>().enabled = true; //in the end, keep showing the sprite renderer of the "playerArt".
 	}
-}
 
+	public void PlayerDeath () //Creates a new public function called "PlayerDeath".
+	{
+		Instantiate (bloodParticles, transform.position, Quaternion.identity); //This creates the "bloodParticles". This is choosing one object ("bloodParticles") to place, placing it in the position of the "Player", and giving it the original rotation ("Quaternion.identity" just means original rotation).
+		this.gameObject.SetActive(false); //Sets the current "gameObject" as inactive.
+	}
+}

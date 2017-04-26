@@ -5,6 +5,7 @@ using UnityEngine;
 public class HurtPlayer : MonoBehaviour 
 {
 	public int damageToGive; //Declare a public variable of type "int" and name it "damageToGive". "damageToGive" is set in the inspector.
+
 	public Rigidbody2D enemyRigidBody; //Declare a public variable of type "Rigidbody2D" and name it "enemyRigidBody".
 
 	public PlayerController thePlayerController; //Declare a public variable of type "PlayerController" and name it "thePlayerController". Making a reference to the "PlayerController" script attached to the "Player" game object.
@@ -50,8 +51,4 @@ public class HurtPlayer : MonoBehaviour
 			}
 		}
 	}
-		
-
-
-
 }

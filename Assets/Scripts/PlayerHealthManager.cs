@@ -33,11 +33,9 @@ public class PlayerHealthManager : MonoBehaviour
 
 			theGameManager.GetComponent<GameManagerScript>().TimeSurvived = GameObject.Find("Player").GetComponent<PlayerController>().timeSurvivedText.text; //Sets the "TimeSurvived" string on the "GameManagerScript" script on the "Game Manager" game object to be equal to the "timeSurvivedText" string on the "PlayerController" script on the "Player" game object.
 
-			gameOverScreen.SetActive (true); //Sets the "gameOverScreen" to active (true).
-			gameObject.SetActive (false); //Sets the "gameObject" to not active (false).
+			GameObject.Find ("Player").GetComponent<PlayerController> ().PlayerDeath(); //Finds the "Player", looks for its script, and calls the "PlayerDeath()" function on its script.
 
-			playScreenMusic.Stop (); //Stops playing the "playScreenMusic".
-			gameOverScreenMusic.Play (); //Plays the "gameOverScreenMusic".
+			Invoke ("EndGame", 2f); //Calls the "EndGame" function after a delay of "2f".
 		}
 	}
 		
@@ -46,6 +44,15 @@ public class PlayerHealthManager : MonoBehaviour
 	{
 		currentHealth -= damageAmount; //Shorter version of writing "currentHealth = currentHealth - damageAmount".
 		healthText.text = "Health: " + currentHealth; //Sets the "Text" textbox of the "healthText" object to display "Health: " plus the "currentHealth" value.
+	}
+
+	public void EndGame () //Creates a new public function called "EndGame".
+	{
+		gameOverScreen.SetActive (true); //Sets the "gameOverScreen" to active (true).
+		gameObject.SetActive (false); //Sets the "gameObject" to not active (false).
+
+		playScreenMusic.Stop (); //Stops playing the "playScreenMusic".
+		gameOverScreenMusic.Play (); //Plays the "gameOverScreenMusic".
 	}
 }
 
